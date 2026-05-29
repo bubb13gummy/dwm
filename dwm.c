@@ -403,8 +403,14 @@ arrangemon(Monitor *m)
 void
 attach(Client *c)
 {
-	c->next = c->mon->clients;
-	c->mon->clients = c;
+	Client *at, *last = NULL;
+	for (at = c->mon->clients; at; at = at->next)
+		last = at;
+	if (last)
+		last->next = c;
+	else
+		c->mon->clients = c;
+	c->next = NULL;
 }
 
 void
